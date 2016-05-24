@@ -82,16 +82,16 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(119, 26);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Firmware (BN03V117M \r\nrecommended)";
+            this.label3.Text = "Firmware (BN03V104M \r\nrecommended)";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 137);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(122, 13);
+            this.label4.Size = new System.Drawing.Size(191, 13);
             this.label4.TabIndex = 4;
-            this.label4.Text = "Backup current firmware";
+            this.label4.Text = "Backup current firmware (coming soon)";
             // 
             // scriptselect
             // 

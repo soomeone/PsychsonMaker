@@ -60,6 +60,10 @@ namespace PsychsonMaker
         public void log(String text)
         {
             console.Text += text + "\n";
+            
+            // Scroll to bottom
+            console.SelectionStart = console.Text.Length;
+            console.ScrollToCaret();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -74,9 +78,11 @@ namespace PsychsonMaker
             {
                 // Format correctly the data
                 char drivename = drive.Text.ToCharArray()[0];
-                string firmwarename = fwdirectory + firmware.Text;
+                string firmwarename = firmware.Text;
 
+                burnbutton.Enabled = false;
                 Program.burnfw(drivename, firmwarename, scriptfile.Text, backup.Checked);
+                burnbutton.Enabled = true;
             }
             else
             {

@@ -51,8 +51,8 @@ namespace PsychsonMaker
 
             // Paths
             string fw = filedirectory + "firmware\\bin\\fw.bin";
-            string burner = filedirectory + "firmware\\bin\\fw.bin";
             string injectfile = filedirectory + "inject.bin";
+            string burner = filedirectory + "2251-firmware\\" + burnerpath;
 
             // Begin
             log("");
@@ -91,9 +91,23 @@ namespace PsychsonMaker
             log("Script has been embeded in fw");
             
             // Warning the user
-            MessageBox.Show("In the next step, your drive will be flashed. Read the following output. If you get any errors, put a Screenshot on the github page. \n\n This could brick your USB stick. We don't take any . You have been warned...");
-            String driveargs = "/drive=" + drive + " /action=SendFirmware /burner=\"" + burnerpath + "\" /firmware=\"" + fw + "\"";
-            startProcess("files\\DriveCom.exe", driveargs, filedirectory, true);
+            MessageBox.Show("In the next step, your drive will be flashed. Read the following output. If you get any errors, put a Screenshot on the github page. \n\nThis could brick your USB stick. We don't take any responsibility for damage. You have been warned...");
+            String driveargs = "/drive=" + drive + " /action=SendFirmware /burner=\"" + burner + "\" /firmware=\"" + fw + "\"";
+            
+            log("----  Starting Flashing  ----");
+            String output = startProcess("\"" + filedirectory + "DriveCom.exe\"", driveargs, filedirectory, true);
+
+            log("Flashing process finished");
+
+            if (output.Contains("FATAL"))
+            {
+                log("Flashing process FAILED");
+                MessageBox.Show("Flashing FAILED\n\nYour stick could work normally.");
+            }
+            else
+            {
+                MessageBox.Show("If you didn't see any errors, your stick has been flashed sucessfully with your script. \nTo restore to your recently firmware, just select your .bin backup file (If you selected the backup option) and restart the procedure (This function is coming soon). \n\n Thanks for using this tool ;) but remember, it's on alpha status");
+            }
         }
 
         public static void dumpDrive(char drive)
@@ -101,18 +115,34 @@ namespace PsychsonMaker
 
         }
 
-        public static void startProcess(String path, String args, String directory, bool display)
+        public static String startProcess(String path, String args, String directory, bool display)
         {
+            String output = "";
+
             Process process = new Process();
 
             process.StartInfo.FileName = path;
             process.StartInfo.Arguments = args;
             process.StartInfo.WorkingDirectory = directory;
 
+            // Output to local console
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
+
             if (!display) { process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; }
             process.Start();
-            if (path != "java") { process.WaitForExit(); // Waits to finish the process 
+            //if (path != "java") { process.WaitForExit(); // Waits to finish the process 
+            //}
+
+            while (!process.StandardOutput.EndOfStream)
+            {
+                string line = process.StandardOutput.ReadLine();
+                log(line);
+                output += line;
             }
+
+            return output;
         }
 
 
