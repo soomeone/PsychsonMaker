@@ -1,0 +1,790 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.5.0 #9253 (Jun 20 2015) (MINGW64)
+                                      4 ; This file was generated Tue May 24 19:37:47 2016
+                                      5 ;--------------------------------------------------------
+                                      6 	.module scsi
+                                      7 	.optsdcc -mmcs51 --model-small
+                                      8 	
+                                      9 ;--------------------------------------------------------
+                                     10 ; Public variables in this module
+                                     11 ;--------------------------------------------------------
+                                     12 	.globl _HandleCDB
+                                     13 	.globl _SendData1
+                                     14 	.globl _memset
+                                     15 	.globl _RI
+                                     16 	.globl _TI
+                                     17 	.globl _RB8
+                                     18 	.globl _TB8
+                                     19 	.globl _REN
+                                     20 	.globl _SM2
+                                     21 	.globl _SM1
+                                     22 	.globl _SM0
+                                     23 	.globl _RXD
+                                     24 	.globl _TXD
+                                     25 	.globl _INT0
+                                     26 	.globl _INT1
+                                     27 	.globl _T0
+                                     28 	.globl _T1
+                                     29 	.globl _WR
+                                     30 	.globl _RD
+                                     31 	.globl _PX0
+                                     32 	.globl _PT0
+                                     33 	.globl _PX1
+                                     34 	.globl _PT1
+                                     35 	.globl _PS
+                                     36 	.globl _EX0
+                                     37 	.globl _ET0
+                                     38 	.globl _EX1
+                                     39 	.globl _ET1
+                                     40 	.globl _ES
+                                     41 	.globl _EA
+                                     42 	.globl _IT0
+                                     43 	.globl _IE0
+                                     44 	.globl _IT1
+                                     45 	.globl _IE1
+                                     46 	.globl _TR0
+                                     47 	.globl _TF0
+                                     48 	.globl _TR1
+                                     49 	.globl _TF1
+                                     50 	.globl _P
+                                     51 	.globl _OV
+                                     52 	.globl _RS0
+                                     53 	.globl _RS1
+                                     54 	.globl _F0
+                                     55 	.globl _AC
+                                     56 	.globl _CY
+                                     57 	.globl _SBUF
+                                     58 	.globl _SCON
+                                     59 	.globl _IP
+                                     60 	.globl _IE
+                                     61 	.globl _TH1
+                                     62 	.globl _TH0
+                                     63 	.globl _TL1
+                                     64 	.globl _TL0
+                                     65 	.globl _TMOD
+                                     66 	.globl _TCON
+                                     67 	.globl _PCON
+                                     68 	.globl _DPH
+                                     69 	.globl _DPL
+                                     70 	.globl _SP
+                                     71 	.globl _B
+                                     72 	.globl _ACC
+                                     73 	.globl _PSW
+                                     74 	.globl _P3
+                                     75 	.globl _P2
+                                     76 	.globl _P1
+                                     77 	.globl _P0
+                                     78 	.globl _PRAMCTL
+                                     79 	.globl _BANK2PAH
+                                     80 	.globl _BANK2PAL
+                                     81 	.globl _BANK2VA
+                                     82 	.globl _BANK1PAH
+                                     83 	.globl _BANK1PAL
+                                     84 	.globl _BANK1VA
+                                     85 	.globl _BANK0PAH
+                                     86 	.globl _BANK0PAL
+                                     87 	.globl _WARMSTATUS
+                                     88 	.globl _GPIO0OUT
+                                     89 	.globl _GPIO0DIR
+                                     90 	.globl _DMACMD
+                                     91 	.globl _DMAFILL3
+                                     92 	.globl _DMAFILL2
+                                     93 	.globl _DMAFILL1
+                                     94 	.globl _DMAFILL0
+                                     95 	.globl _DMASIZEH
+                                     96 	.globl _DMASIZEM
+                                     97 	.globl _DMASIZEL
+                                     98 	.globl _DMADSTH
+                                     99 	.globl _DMADSTM
+                                    100 	.globl _DMADSTL
+                                    101 	.globl _DMASRCH
+                                    102 	.globl _DMASRCM
+                                    103 	.globl _DMASRCL
+                                    104 	.globl _NANDCSDIR
+                                    105 	.globl _NANDCSOUT
+                                    106 	.globl _EP4
+                                    107 	.globl _EP3
+                                    108 	.globl _EP2
+                                    109 	.globl _EP1
+                                    110 	.globl _EP0
+                                    111 	.globl _SETUPDAT
+                                    112 	.globl _EP0CS
+                                    113 	.globl _EPIE
+                                    114 	.globl _EPIRQ
+                                    115 	.globl _USBIRQ
+                                    116 	.globl _USBSTAT
+                                    117 	.globl _USBCTL
+                                    118 	.globl _REGBANK
+                                    119 	.globl _scsi_cdb_size
+                                    120 	.globl _scsi_cdb
+                                    121 	.globl _scsi_lun
+                                    122 	.globl _scsi_dir_in
+                                    123 	.globl _scsi_tag
+                                    124 	.globl _scsi_transfer_size
+                                    125 	.globl _scsi_data_residue
+                                    126 	.globl _scsi_status
+                                    127 ;--------------------------------------------------------
+                                    128 ; special function registers
+                                    129 ;--------------------------------------------------------
+                                    130 	.area RSEG    (ABS,DATA)
+      000000                        131 	.org 0x0000
+                           000080   132 _P0	=	0x0080
+                           000090   133 _P1	=	0x0090
+                           0000A0   134 _P2	=	0x00a0
+                           0000B0   135 _P3	=	0x00b0
+                           0000D0   136 _PSW	=	0x00d0
+                           0000E0   137 _ACC	=	0x00e0
+                           0000F0   138 _B	=	0x00f0
+                           000081   139 _SP	=	0x0081
+                           000082   140 _DPL	=	0x0082
+                           000083   141 _DPH	=	0x0083
+                           000087   142 _PCON	=	0x0087
+                           000088   143 _TCON	=	0x0088
+                           000089   144 _TMOD	=	0x0089
+                           00008A   145 _TL0	=	0x008a
+                           00008B   146 _TL1	=	0x008b
+                           00008C   147 _TH0	=	0x008c
+                           00008D   148 _TH1	=	0x008d
+                           0000A8   149 _IE	=	0x00a8
+                           0000B8   150 _IP	=	0x00b8
+                           000098   151 _SCON	=	0x0098
+                           000099   152 _SBUF	=	0x0099
+                                    153 ;--------------------------------------------------------
+                                    154 ; special function bits
+                                    155 ;--------------------------------------------------------
+                                    156 	.area RSEG    (ABS,DATA)
+      000000                        157 	.org 0x0000
+                           0000D7   158 _CY	=	0x00d7
+                           0000D6   159 _AC	=	0x00d6
+                           0000D5   160 _F0	=	0x00d5
+                           0000D4   161 _RS1	=	0x00d4
+                           0000D3   162 _RS0	=	0x00d3
+                           0000D2   163 _OV	=	0x00d2
+                           0000D0   164 _P	=	0x00d0
+                           00008F   165 _TF1	=	0x008f
+                           00008E   166 _TR1	=	0x008e
+                           00008D   167 _TF0	=	0x008d
+                           00008C   168 _TR0	=	0x008c
+                           00008B   169 _IE1	=	0x008b
+                           00008A   170 _IT1	=	0x008a
+                           000089   171 _IE0	=	0x0089
+                           000088   172 _IT0	=	0x0088
+                           0000AF   173 _EA	=	0x00af
+                           0000AC   174 _ES	=	0x00ac
+                           0000AB   175 _ET1	=	0x00ab
+                           0000AA   176 _EX1	=	0x00aa
+                           0000A9   177 _ET0	=	0x00a9
+                           0000A8   178 _EX0	=	0x00a8
+                           0000BC   179 _PS	=	0x00bc
+                           0000BB   180 _PT1	=	0x00bb
+                           0000BA   181 _PX1	=	0x00ba
+                           0000B9   182 _PT0	=	0x00b9
+                           0000B8   183 _PX0	=	0x00b8
+                           0000B7   184 _RD	=	0x00b7
+                           0000B6   185 _WR	=	0x00b6
+                           0000B5   186 _T1	=	0x00b5
+                           0000B4   187 _T0	=	0x00b4
+                           0000B3   188 _INT1	=	0x00b3
+                           0000B2   189 _INT0	=	0x00b2
+                           0000B1   190 _TXD	=	0x00b1
+                           0000B0   191 _RXD	=	0x00b0
+                           00009F   192 _SM0	=	0x009f
+                           00009E   193 _SM1	=	0x009e
+                           00009D   194 _SM2	=	0x009d
+                           00009C   195 _REN	=	0x009c
+                           00009B   196 _TB8	=	0x009b
+                           00009A   197 _RB8	=	0x009a
+                           000099   198 _TI	=	0x0099
+                           000098   199 _RI	=	0x0098
+                                    200 ;--------------------------------------------------------
+                                    201 ; overlayable register banks
+                                    202 ;--------------------------------------------------------
+                                    203 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                        204 	.ds 8
+                                    205 ;--------------------------------------------------------
+                                    206 ; internal ram data
+                                    207 ;--------------------------------------------------------
+                                    208 	.area DSEG    (DATA)
+      000000                        209 _scsi_status::
+      000000                        210 	.ds 1
+      000001                        211 _scsi_data_residue::
+      000001                        212 	.ds 4
+      000005                        213 _scsi_transfer_size::
+      000005                        214 	.ds 4
+      000009                        215 _scsi_tag::
+      000009                        216 	.ds 4
+      00000D                        217 _scsi_dir_in::
+      00000D                        218 	.ds 1
+      00000E                        219 _scsi_lun::
+      00000E                        220 	.ds 1
+      00000F                        221 _scsi_cdb::
+      00000F                        222 	.ds 16
+      00001F                        223 _scsi_cdb_size::
+      00001F                        224 	.ds 1
+                                    225 ;--------------------------------------------------------
+                                    226 ; overlayable items in internal ram 
+                                    227 ;--------------------------------------------------------
+                                    228 ;--------------------------------------------------------
+                                    229 ; indirectly addressable internal ram data
+                                    230 ;--------------------------------------------------------
+                                    231 	.area ISEG    (DATA)
+                                    232 ;--------------------------------------------------------
+                                    233 ; absolute internal ram data
+                                    234 ;--------------------------------------------------------
+                                    235 	.area IABS    (ABS,DATA)
+                                    236 	.area IABS    (ABS,DATA)
+                                    237 ;--------------------------------------------------------
+                                    238 ; bit data
+                                    239 ;--------------------------------------------------------
+                                    240 	.area BSEG    (BIT)
+                                    241 ;--------------------------------------------------------
+                                    242 ; paged external ram data
+                                    243 ;--------------------------------------------------------
+                                    244 	.area PSEG    (PAG,XDATA)
+                                    245 ;--------------------------------------------------------
+                                    246 ; external ram data
+                                    247 ;--------------------------------------------------------
+                                    248 	.area XSEG    (XDATA)
+                           00F000   249 _REGBANK	=	0xf000
+                           00F008   250 _USBCTL	=	0xf008
+                           00F009   251 _USBSTAT	=	0xf009
+                           00F027   252 _USBIRQ	=	0xf027
+                           00F020   253 _EPIRQ	=	0xf020
+                           00F030   254 _EPIE	=	0xf030
+                           00F048   255 _EP0CS	=	0xf048
+                           00F0B8   256 _SETUPDAT	=	0xf0b8
+                           00F1C0   257 _EP0	=	0xf1c0
+                           00F200   258 _EP1	=	0xf200
+                           00F240   259 _EP2	=	0xf240
+                           00F280   260 _EP3	=	0xf280
+                           00F2C0   261 _EP4	=	0xf2c0
+                           00F608   262 _NANDCSOUT	=	0xf608
+                           00F618   263 _NANDCSDIR	=	0xf618
+                           00F900   264 _DMASRCL	=	0xf900
+                           00F901   265 _DMASRCM	=	0xf901
+                           00F902   266 _DMASRCH	=	0xf902
+                           00F904   267 _DMADSTL	=	0xf904
+                           00F905   268 _DMADSTM	=	0xf905
+                           00F906   269 _DMADSTH	=	0xf906
+                           00F908   270 _DMASIZEL	=	0xf908
+                           00F909   271 _DMASIZEM	=	0xf909
+                           00F90A   272 _DMASIZEH	=	0xf90a
+                           00F90C   273 _DMAFILL0	=	0xf90c
+                           00F90D   274 _DMAFILL1	=	0xf90d
+                           00F90E   275 _DMAFILL2	=	0xf90e
+                           00F90F   276 _DMAFILL3	=	0xf90f
+                           00F930   277 _DMACMD	=	0xf930
+                           00FA14   278 _GPIO0DIR	=	0xfa14
+                           00FA15   279 _GPIO0OUT	=	0xfa15
+                           00FA38   280 _WARMSTATUS	=	0xfa38
+                           00FA40   281 _BANK0PAL	=	0xfa40
+                           00FA41   282 _BANK0PAH	=	0xfa41
+                           00FA42   283 _BANK1VA	=	0xfa42
+                           00FA43   284 _BANK1PAL	=	0xfa43
+                           00FA44   285 _BANK1PAH	=	0xfa44
+                           00FA45   286 _BANK2VA	=	0xfa45
+                           00FA46   287 _BANK2PAL	=	0xfa46
+                           00FA47   288 _BANK2PAH	=	0xfa47
+                           00FA48   289 _PRAMCTL	=	0xfa48
+                                    290 ;--------------------------------------------------------
+                                    291 ; absolute external ram data
+                                    292 ;--------------------------------------------------------
+                                    293 	.area XABS    (ABS,XDATA)
+                                    294 ;--------------------------------------------------------
+                                    295 ; external initialized ram data
+                                    296 ;--------------------------------------------------------
+                                    297 	.area XISEG   (XDATA)
+                                    298 	.area HOME    (CODE)
+                                    299 	.area GSINIT0 (CODE)
+                                    300 	.area GSINIT1 (CODE)
+                                    301 	.area GSINIT2 (CODE)
+                                    302 	.area GSINIT3 (CODE)
+                                    303 	.area GSINIT4 (CODE)
+                                    304 	.area GSINIT5 (CODE)
+                                    305 	.area GSINIT  (CODE)
+                                    306 	.area GSFINAL (CODE)
+                                    307 	.area CSEG    (CODE)
+                                    308 ;--------------------------------------------------------
+                                    309 ; global & static initialisations
+                                    310 ;--------------------------------------------------------
+                                    311 	.area HOME    (CODE)
+                                    312 	.area GSINIT  (CODE)
+                                    313 	.area GSFINAL (CODE)
+                                    314 	.area GSINIT  (CODE)
+                                    315 ;--------------------------------------------------------
+                                    316 ; Home
+                                    317 ;--------------------------------------------------------
+                                    318 	.area HOME    (CODE)
+                                    319 	.area HOME    (CODE)
+                                    320 ;--------------------------------------------------------
+                                    321 ; code
+                                    322 ;--------------------------------------------------------
+                                    323 	.area CSEG    (CODE)
+                                    324 ;------------------------------------------------------------
+                                    325 ;Allocation info for local variables in function 'HandleCDB'
+                                    326 ;------------------------------------------------------------
+                                    327 ;i                         Allocated to registers r6 r7 
+                                    328 ;i                         Allocated with name '_HandleCDB_i_5_43'
+                                    329 ;------------------------------------------------------------
+                                    330 ;	scsi.c:29: BYTE HandleCDB()
+                                    331 ;	-----------------------------------------
+                                    332 ;	 function HandleCDB
+                                    333 ;	-----------------------------------------
+      000000                        334 _HandleCDB:
+                           000007   335 	ar7 = 0x07
+                           000006   336 	ar6 = 0x06
+                           000005   337 	ar5 = 0x05
+                           000004   338 	ar4 = 0x04
+                           000003   339 	ar3 = 0x03
+                           000002   340 	ar2 = 0x02
+                           000001   341 	ar1 = 0x01
+                           000000   342 	ar0 = 0x00
+                                    343 ;	scsi.c:32: scsi_status = 1;
+      000000 75*00 01         [24]  344 	mov	_scsi_status,#0x01
+                                    345 ;	scsi.c:34: switch(scsi_cdb[0])
+      000003 AF*0F            [24]  346 	mov	r7,_scsi_cdb
+      000005 BF 00 02         [24]  347 	cjne	r7,#0x00,00190$
+      000008 80 37            [24]  348 	sjmp	00102$
+      00000A                        349 00190$:
+      00000A BF 03 03         [24]  350 	cjne	r7,#0x03,00191$
+      00000D 02r00rDE         [24]  351 	ljmp	00106$
+      000010                        352 00191$:
+      000010 BF 06 03         [24]  353 	cjne	r7,#0x06,00192$
+      000013 02r01r18         [24]  354 	ljmp	00109$
+      000016                        355 00192$:
+      000016 BF 12 02         [24]  356 	cjne	r7,#0x12,00193$
+      000019 80 2A            [24]  357 	sjmp	00103$
+      00001B                        358 00193$:
+      00001B BF 1A 03         [24]  359 	cjne	r7,#0x1A,00194$
+      00001E 02r00rB0         [24]  360 	ljmp	00105$
+      000021                        361 00194$:
+      000021 BF 1E 02         [24]  362 	cjne	r7,#0x1E,00195$
+      000024 80 14            [24]  363 	sjmp	00101$
+      000026                        364 00195$:
+      000026 BF 23 02         [24]  365 	cjne	r7,#0x23,00196$
+      000029 80 4D            [24]  366 	sjmp	00104$
+      00002B                        367 00196$:
+      00002B BF C6 03         [24]  368 	cjne	r7,#0xC6,00197$
+      00002E 02r01r18         [24]  369 	ljmp	00109$
+      000031                        370 00197$:
+      000031 BF C7 03         [24]  371 	cjne	r7,#0xC7,00198$
+      000034 02r01r18         [24]  372 	ljmp	00109$
+      000037                        373 00198$:
+      000037 02r02rAB         [24]  374 	ljmp	00123$
+                                    375 ;	scsi.c:36: case PREVENT_ALLOW_MEDIUM_REMOVAL:
+      00003A                        376 00101$:
+                                    377 ;	scsi.c:38: scsi_status = 0;
+      00003A 75*00 00         [24]  378 	mov	_scsi_status,#0x00
+                                    379 ;	scsi.c:39: return 1;
+      00003D 75 82 01         [24]  380 	mov	dpl,#0x01
+      000040 22               [24]  381 	ret
+                                    382 ;	scsi.c:41: case TEST_UNIT_READY:
+      000041                        383 00102$:
+                                    384 ;	scsi.c:43: return 1;
+      000041 75 82 01         [24]  385 	mov	dpl,#0x01
+      000044 22               [24]  386 	ret
+                                    387 ;	scsi.c:45: case INQUIRY:
+      000045                        388 00103$:
+                                    389 ;	scsi.c:47: memset(usb_buffer, 0, 36);
+      000045 75*00 00         [24]  390 	mov	_memset_PARM_2,#0x00
+      000048 75*00 24         [24]  391 	mov	_memset_PARM_3,#0x24
+      00004B 75*01 00         [24]  392 	mov	(_memset_PARM_3 + 1),#0x00
+      00004E 90r00r00         [24]  393 	mov	dptr,#_usb_buffer
+      000051 75 F0 00         [24]  394 	mov	b,#0x00
+      000054 12r00r00         [24]  395 	lcall	_memset
+                                    396 ;	scsi.c:48: usb_buffer[1] = 0x80; //removable media
+      000057 90r00r01         [24]  397 	mov	dptr,#(_usb_buffer + 0x0001)
+      00005A 74 80            [12]  398 	mov	a,#0x80
+      00005C F0               [24]  399 	movx	@dptr,a
+                                    400 ;	scsi.c:49: usb_buffer[3] = 0x01; //because the UFI spec says so
+      00005D 90r00r03         [24]  401 	mov	dptr,#(_usb_buffer + 0x0003)
+      000060 23               [12]  402 	rl	a
+      000061 F0               [24]  403 	movx	@dptr,a
+                                    404 ;	scsi.c:50: usb_buffer[4] = 0x1F; //additional length
+      000062 90r00r04         [24]  405 	mov	dptr,#(_usb_buffer + 0x0004)
+      000065 74 1F            [12]  406 	mov	a,#0x1F
+      000067 F0               [24]  407 	movx	@dptr,a
+                                    408 ;	scsi.c:51: SendData1(36, 0);
+      000068 75*00 00         [24]  409 	mov	_SendData1_PARM_2,#0x00
+      00006B 90 00 24         [24]  410 	mov	dptr,#0x0024
+      00006E 12r00r00         [24]  411 	lcall	_SendData1
+                                    412 ;	scsi.c:52: scsi_status = 0;
+      000071 75*00 00         [24]  413 	mov	_scsi_status,#0x00
+                                    414 ;	scsi.c:53: return 1;
+      000074 75 82 01         [24]  415 	mov	dpl,#0x01
+      000077 22               [24]  416 	ret
+                                    417 ;	scsi.c:55: case READ_FORMAT_CAPACITIES:
+      000078                        418 00104$:
+                                    419 ;	scsi.c:57: memset(usb_buffer, 0, 12);
+      000078 75*00 00         [24]  420 	mov	_memset_PARM_2,#0x00
+      00007B 75*00 0C         [24]  421 	mov	_memset_PARM_3,#0x0C
+      00007E 75*01 00         [24]  422 	mov	(_memset_PARM_3 + 1),#0x00
+      000081 90r00r00         [24]  423 	mov	dptr,#_usb_buffer
+      000084 75 F0 00         [24]  424 	mov	b,#0x00
+      000087 12r00r00         [24]  425 	lcall	_memset
+                                    426 ;	scsi.c:58: usb_buffer[3] = 0x08; //capacity list length
+      00008A 90r00r03         [24]  427 	mov	dptr,#(_usb_buffer + 0x0003)
+      00008D 74 08            [12]  428 	mov	a,#0x08
+      00008F F0               [24]  429 	movx	@dptr,a
+                                    430 ;	scsi.c:59: usb_buffer[6] = 0x10; //number of blocks (sectors) (dummy 2MB)
+      000090 90r00r06         [24]  431 	mov	dptr,#(_usb_buffer + 0x0006)
+      000093 23               [12]  432 	rl	a
+      000094 F0               [24]  433 	movx	@dptr,a
+                                    434 ;	scsi.c:60: usb_buffer[8] = 0x03;
+      000095 90r00r08         [24]  435 	mov	dptr,#(_usb_buffer + 0x0008)
+      000098 74 03            [12]  436 	mov	a,#0x03
+      00009A F0               [24]  437 	movx	@dptr,a
+                                    438 ;	scsi.c:61: usb_buffer[10] = 0x02; //block length (512 bytes/sector)
+      00009B 90r00r0A         [24]  439 	mov	dptr,#(_usb_buffer + 0x000a)
+      00009E 14               [12]  440 	dec	a
+      00009F F0               [24]  441 	movx	@dptr,a
+                                    442 ;	scsi.c:62: SendData1(12, 0);
+      0000A0 75*00 00         [24]  443 	mov	_SendData1_PARM_2,#0x00
+      0000A3 90 00 0C         [24]  444 	mov	dptr,#0x000C
+      0000A6 12r00r00         [24]  445 	lcall	_SendData1
+                                    446 ;	scsi.c:63: scsi_status = 0;
+      0000A9 75*00 00         [24]  447 	mov	_scsi_status,#0x00
+                                    448 ;	scsi.c:64: return 1;
+      0000AC 75 82 01         [24]  449 	mov	dpl,#0x01
+      0000AF 22               [24]  450 	ret
+                                    451 ;	scsi.c:66: case MODE_SENSE:
+      0000B0                        452 00105$:
+                                    453 ;	scsi.c:68: memset(usb_buffer, 0, 8);
+      0000B0 75*00 00         [24]  454 	mov	_memset_PARM_2,#0x00
+      0000B3 75*00 08         [24]  455 	mov	_memset_PARM_3,#0x08
+      0000B6 75*01 00         [24]  456 	mov	(_memset_PARM_3 + 1),#0x00
+      0000B9 90r00r00         [24]  457 	mov	dptr,#_usb_buffer
+      0000BC 75 F0 00         [24]  458 	mov	b,#0x00
+      0000BF 12r00r00         [24]  459 	lcall	_memset
+                                    460 ;	scsi.c:69: usb_buffer[0] = 0x03;
+      0000C2 90r00r00         [24]  461 	mov	dptr,#_usb_buffer
+      0000C5 74 03            [12]  462 	mov	a,#0x03
+      0000C7 F0               [24]  463 	movx	@dptr,a
+                                    464 ;	scsi.c:70: usb_buffer[2] = 0x80;
+      0000C8 90r00r02         [24]  465 	mov	dptr,#(_usb_buffer + 0x0002)
+      0000CB 74 80            [12]  466 	mov	a,#0x80
+      0000CD F0               [24]  467 	movx	@dptr,a
+                                    468 ;	scsi.c:71: SendData1(4, 0);
+      0000CE 75*00 00         [24]  469 	mov	_SendData1_PARM_2,#0x00
+      0000D1 90 00 04         [24]  470 	mov	dptr,#0x0004
+      0000D4 12r00r00         [24]  471 	lcall	_SendData1
+                                    472 ;	scsi.c:72: scsi_status = 0;
+      0000D7 75*00 00         [24]  473 	mov	_scsi_status,#0x00
+                                    474 ;	scsi.c:73: return 1;
+      0000DA 75 82 01         [24]  475 	mov	dpl,#0x01
+      0000DD 22               [24]  476 	ret
+                                    477 ;	scsi.c:75: case REQUEST_SENSE:
+      0000DE                        478 00106$:
+                                    479 ;	scsi.c:77: memset(usb_buffer, 0, 18);
+      0000DE 75*00 00         [24]  480 	mov	_memset_PARM_2,#0x00
+      0000E1 75*00 12         [24]  481 	mov	_memset_PARM_3,#0x12
+      0000E4 75*01 00         [24]  482 	mov	(_memset_PARM_3 + 1),#0x00
+      0000E7 90r00r00         [24]  483 	mov	dptr,#_usb_buffer
+      0000EA 75 F0 00         [24]  484 	mov	b,#0x00
+      0000ED 12r00r00         [24]  485 	lcall	_memset
+                                    486 ;	scsi.c:78: usb_buffer[0] = 0x70;
+      0000F0 90r00r00         [24]  487 	mov	dptr,#_usb_buffer
+      0000F3 74 70            [12]  488 	mov	a,#0x70
+      0000F5 F0               [24]  489 	movx	@dptr,a
+                                    490 ;	scsi.c:79: usb_buffer[2] = 0x02;
+      0000F6 90r00r02         [24]  491 	mov	dptr,#(_usb_buffer + 0x0002)
+      0000F9 74 02            [12]  492 	mov	a,#0x02
+      0000FB F0               [24]  493 	movx	@dptr,a
+                                    494 ;	scsi.c:80: usb_buffer[7] = 10;
+      0000FC 90r00r07         [24]  495 	mov	dptr,#(_usb_buffer + 0x0007)
+      0000FF 74 0A            [12]  496 	mov	a,#0x0A
+      000101 F0               [24]  497 	movx	@dptr,a
+                                    498 ;	scsi.c:81: usb_buffer[12] = 0x3A;
+      000102 90r00r0C         [24]  499 	mov	dptr,#(_usb_buffer + 0x000c)
+      000105 74 3A            [12]  500 	mov	a,#0x3A
+      000107 F0               [24]  501 	movx	@dptr,a
+                                    502 ;	scsi.c:82: SendData1(18, 0);
+      000108 75*00 00         [24]  503 	mov	_SendData1_PARM_2,#0x00
+      00010B 90 00 12         [24]  504 	mov	dptr,#0x0012
+      00010E 12r00r00         [24]  505 	lcall	_SendData1
+                                    506 ;	scsi.c:83: scsi_status = 0;
+      000111 75*00 00         [24]  507 	mov	_scsi_status,#0x00
+                                    508 ;	scsi.c:84: return 1;
+      000114 75 82 01         [24]  509 	mov	dpl,#0x01
+      000117 22               [24]  510 	ret
+                                    511 ;	scsi.c:89: case 0xC7:
+      000118                        512 00109$:
+                                    513 ;	scsi.c:91: switch(scsi_cdb[1])
+      000118 AF*10            [24]  514 	mov	r7,(_scsi_cdb + 0x0001)
+      00011A BF 05 03         [24]  515 	cjne	r7,#0x05,00199$
+      00011D 02r02r19         [24]  516 	ljmp	00119$
+      000120                        517 00199$:
+      000120 BF 06 02         [24]  518 	cjne	r7,#0x06,00200$
+      000123 80 1E            [24]  519 	sjmp	00110$
+      000125                        520 00200$:
+      000125 BF 07 02         [24]  521 	cjne	r7,#0x07,00201$
+      000128 80 3C            [24]  522 	sjmp	00111$
+      00012A                        523 00201$:
+      00012A BF 08 02         [24]  524 	cjne	r7,#0x08,00202$
+      00012D 80 58            [24]  525 	sjmp	00112$
+      00012F                        526 00202$:
+      00012F BF 09 02         [24]  527 	cjne	r7,#0x09,00203$
+      000132 80 68            [24]  528 	sjmp	00113$
+      000134                        529 00203$:
+      000134 BF 56 03         [24]  530 	cjne	r7,#0x56,00204$
+      000137 02r01rAC         [24]  531 	ljmp	00114$
+      00013A                        532 00204$:
+      00013A BF BF 03         [24]  533 	cjne	r7,#0xBF,00205$
+      00013D 02r02r70         [24]  534 	ljmp	00120$
+      000140                        535 00205$:
+      000140 02r02rA7         [24]  536 	ljmp	00121$
+                                    537 ;	scsi.c:93: case CUSTOM_XPEEK:
+      000143                        538 00110$:
+                                    539 ;	scsi.c:95: usb_buffer[0] = XVAL((scsi_cdb[2] << 8) | scsi_cdb[3]);
+      000143 AF*11            [24]  540 	mov	r7,(_scsi_cdb + 0x0002)
+      000145 7E 00            [12]  541 	mov	r6,#0x00
+      000147 AC*12            [24]  542 	mov	r4,(_scsi_cdb + 0x0003)
+      000149 7D 00            [12]  543 	mov	r5,#0x00
+      00014B EC               [12]  544 	mov	a,r4
+      00014C 42 06            [12]  545 	orl	ar6,a
+      00014E ED               [12]  546 	mov	a,r5
+      00014F 42 07            [12]  547 	orl	ar7,a
+      000151 8E 82            [24]  548 	mov	dpl,r6
+      000153 8F 83            [24]  549 	mov	dph,r7
+      000155 E0               [24]  550 	movx	a,@dptr
+      000156 90r00r00         [24]  551 	mov	dptr,#_usb_buffer
+      000159 F0               [24]  552 	movx	@dptr,a
+                                    553 ;	scsi.c:96: SendData1(1, 0);
+      00015A 75*00 00         [24]  554 	mov	_SendData1_PARM_2,#0x00
+      00015D 90 00 01         [24]  555 	mov	dptr,#0x0001
+      000160 12r00r00         [24]  556 	lcall	_SendData1
+                                    557 ;	scsi.c:97: break;
+      000163 02r02rAB         [24]  558 	ljmp	00123$
+                                    559 ;	scsi.c:99: case CUSTOM_XPOKE:
+      000166                        560 00111$:
+                                    561 ;	scsi.c:101: XVAL((scsi_cdb[2] << 8) | scsi_cdb[3]) = scsi_cdb[4];
+      000166 AF*11            [24]  562 	mov	r7,(_scsi_cdb + 0x0002)
+      000168 7E 00            [12]  563 	mov	r6,#0x00
+      00016A AC*12            [24]  564 	mov	r4,(_scsi_cdb + 0x0003)
+      00016C 7D 00            [12]  565 	mov	r5,#0x00
+      00016E EC               [12]  566 	mov	a,r4
+      00016F 42 06            [12]  567 	orl	ar6,a
+      000171 ED               [12]  568 	mov	a,r5
+      000172 42 07            [12]  569 	orl	ar7,a
+      000174 8E 82            [24]  570 	mov	dpl,r6
+      000176 8F 83            [24]  571 	mov	dph,r7
+      000178 E5*13            [12]  572 	mov	a,(_scsi_cdb + 0x0004)
+      00017A F0               [24]  573 	movx	@dptr,a
+                                    574 ;	scsi.c:102: SendData1(1, 0);
+      00017B 75*00 00         [24]  575 	mov	_SendData1_PARM_2,#0x00
+      00017E 90 00 01         [24]  576 	mov	dptr,#0x0001
+      000181 12r00r00         [24]  577 	lcall	_SendData1
+                                    578 ;	scsi.c:103: break;
+      000184 02r02rAB         [24]  579 	ljmp	00123$
+                                    580 ;	scsi.c:105: case CUSTOM_IPEEK:
+      000187                        581 00112$:
+                                    582 ;	scsi.c:107: usb_buffer[0] = IVAL(scsi_cdb[2]);
+      000187 A9*11            [24]  583 	mov	r1,(_scsi_cdb + 0x0002)
+      000189 87 07            [24]  584 	mov	ar7,@r1
+      00018B 90r00r00         [24]  585 	mov	dptr,#_usb_buffer
+      00018E EF               [12]  586 	mov	a,r7
+      00018F F0               [24]  587 	movx	@dptr,a
+                                    588 ;	scsi.c:108: SendData1(1, 0);
+      000190 75*00 00         [24]  589 	mov	_SendData1_PARM_2,#0x00
+      000193 90 00 01         [24]  590 	mov	dptr,#0x0001
+      000196 12r00r00         [24]  591 	lcall	_SendData1
+                                    592 ;	scsi.c:109: break;
+      000199 02r02rAB         [24]  593 	ljmp	00123$
+                                    594 ;	scsi.c:111: case CUSTOM_IPOKE:
+      00019C                        595 00113$:
+                                    596 ;	scsi.c:113: IVAL(scsi_cdb[2]) = scsi_cdb[3];
+      00019C A9*11            [24]  597 	mov	r1,(_scsi_cdb + 0x0002)
+      00019E A7*12            [24]  598 	mov	@r1,(_scsi_cdb + 0x0003)
+                                    599 ;	scsi.c:114: SendData1(1, 0);
+      0001A0 75*00 00         [24]  600 	mov	_SendData1_PARM_2,#0x00
+      0001A3 90 00 01         [24]  601 	mov	dptr,#0x0001
+      0001A6 12r00r00         [24]  602 	lcall	_SendData1
+                                    603 ;	scsi.c:115: break;
+      0001A9 02r02rAB         [24]  604 	ljmp	00123$
+                                    605 ;	scsi.c:117: case VENDOR_CHIPID:
+      0001AC                        606 00114$:
+                                    607 ;	scsi.c:120: memset(usb_buffer, 0x00, 0x200);
+      0001AC 75*00 00         [24]  608 	mov	_memset_PARM_2,#0x00
+      0001AF 75*00 00         [24]  609 	mov	_memset_PARM_3,#0x00
+      0001B2 75*01 02         [24]  610 	mov	(_memset_PARM_3 + 1),#0x02
+      0001B5 90r00r00         [24]  611 	mov	dptr,#_usb_buffer
+      0001B8 75 F0 00         [24]  612 	mov	b,#0x00
+      0001BB 12r00r00         [24]  613 	lcall	_memset
+                                    614 ;	scsi.c:123: XVAL(0xF480) = 0x00;
+      0001BE 90 F4 80         [24]  615 	mov	dptr,#0xF480
+      0001C1 E4               [12]  616 	clr	a
+      0001C2 F0               [24]  617 	movx	@dptr,a
+                                    618 ;	scsi.c:124: XVAL(0xF618) = 0xFF;
+      0001C3 90 F6 18         [24]  619 	mov	dptr,#0xF618
+      0001C6 14               [12]  620 	dec	a
+      0001C7 F0               [24]  621 	movx	@dptr,a
+                                    622 ;	scsi.c:127: XVAL(0xF608) = 0xFE;
+      0001C8 90 F6 08         [24]  623 	mov	dptr,#0xF608
+      0001CB 14               [12]  624 	dec	a
+      0001CC F0               [24]  625 	movx	@dptr,a
+                                    626 ;	scsi.c:130: XVAL(0xF400) = 0xFF;
+      0001CD 90 F4 00         [24]  627 	mov	dptr,#0xF400
+      0001D0 04               [12]  628 	inc	a
+      0001D1 F0               [24]  629 	movx	@dptr,a
+                                    630 ;	scsi.c:131: while (!(XVAL(0xF41E) & 0x01));
+      0001D2                        631 00115$:
+      0001D2 90 F4 1E         [24]  632 	mov	dptr,#0xF41E
+      0001D5 E0               [24]  633 	movx	a,@dptr
+      0001D6 FF               [12]  634 	mov	r7,a
+      0001D7 30 E0 F8         [24]  635 	jnb	acc.0,00115$
+                                    636 ;	scsi.c:134: XVAL(0xF400) = 0x90;
+      0001DA 90 F4 00         [24]  637 	mov	dptr,#0xF400
+      0001DD 74 90            [12]  638 	mov	a,#0x90
+      0001DF F0               [24]  639 	movx	@dptr,a
+                                    640 ;	scsi.c:135: XVAL(0xF404) = 0x00;
+      0001E0 90 F4 04         [24]  641 	mov	dptr,#0xF404
+      0001E3 E4               [12]  642 	clr	a
+      0001E4 F0               [24]  643 	movx	@dptr,a
+                                    644 ;	scsi.c:136: for (i = 0; i < 6; i++)
+      0001E5 7E 00            [12]  645 	mov	r6,#0x00
+      0001E7 7F 00            [12]  646 	mov	r7,#0x00
+      0001E9                        647 00125$:
+                                    648 ;	scsi.c:138: usb_buffer[i] = XVAL(0xF408);
+      0001E9 8E 04            [24]  649 	mov	ar4,r6
+      0001EB 74s00            [12]  650 	mov	a,#(_usb_buffer >> 8)
+      0001ED 2F               [12]  651 	add	a,r7
+      0001EE FD               [12]  652 	mov	r5,a
+      0001EF 90 F4 08         [24]  653 	mov	dptr,#0xF408
+      0001F2 E0               [24]  654 	movx	a,@dptr
+      0001F3 FB               [12]  655 	mov	r3,a
+      0001F4 8C 82            [24]  656 	mov	dpl,r4
+      0001F6 8D 83            [24]  657 	mov	dph,r5
+      0001F8 F0               [24]  658 	movx	@dptr,a
+                                    659 ;	scsi.c:136: for (i = 0; i < 6; i++)
+      0001F9 0E               [12]  660 	inc	r6
+      0001FA BE 00 01         [24]  661 	cjne	r6,#0x00,00207$
+      0001FD 0F               [12]  662 	inc	r7
+      0001FE                        663 00207$:
+      0001FE C3               [12]  664 	clr	c
+      0001FF EE               [12]  665 	mov	a,r6
+      000200 94 06            [12]  666 	subb	a,#0x06
+      000202 EF               [12]  667 	mov	a,r7
+      000203 64 80            [12]  668 	xrl	a,#0x80
+      000205 94 80            [12]  669 	subb	a,#0x80
+      000207 40 E0            [24]  670 	jc	00125$
+                                    671 ;	scsi.c:141: SendData1(0x200, 0);
+      000209 75*00 00         [24]  672 	mov	_SendData1_PARM_2,#0x00
+      00020C 90 02 00         [24]  673 	mov	dptr,#0x0200
+      00020F 12r00r00         [24]  674 	lcall	_SendData1
+                                    675 ;	scsi.c:142: scsi_status = 0;
+      000212 75*00 00         [24]  676 	mov	_scsi_status,#0x00
+                                    677 ;	scsi.c:143: return 1;
+      000215 75 82 01         [24]  678 	mov	dpl,#0x01
+      000218 22               [24]  679 	ret
+                                    680 ;	scsi.c:145: case VENDOR_INFO: //get info
+      000219                        681 00119$:
+                                    682 ;	scsi.c:149: memset(usb_buffer, 0x00, 0x210);
+      000219 75*00 00         [24]  683 	mov	_memset_PARM_2,#0x00
+      00021C 75*00 10         [24]  684 	mov	_memset_PARM_3,#0x10
+      00021F 75*01 02         [24]  685 	mov	(_memset_PARM_3 + 1),#0x02
+      000222 90r00r00         [24]  686 	mov	dptr,#_usb_buffer
+      000225 75 F0 00         [24]  687 	mov	b,#0x00
+      000228 12r00r00         [24]  688 	lcall	_memset
+                                    689 ;	scsi.c:150: usb_buffer[0x094] = 0x00;
+      00022B 90r00r94         [24]  690 	mov	dptr,#(_usb_buffer + 0x0094)
+      00022E E4               [12]  691 	clr	a
+      00022F F0               [24]  692 	movx	@dptr,a
+                                    693 ;	scsi.c:151: usb_buffer[0x095] = 0x99;
+      000230 90r00r95         [24]  694 	mov	dptr,#(_usb_buffer + 0x0095)
+      000233 74 99            [12]  695 	mov	a,#0x99
+      000235 F0               [24]  696 	movx	@dptr,a
+                                    697 ;	scsi.c:152: usb_buffer[0x096] = 0x53;
+      000236 90r00r96         [24]  698 	mov	dptr,#(_usb_buffer + 0x0096)
+      000239 74 53            [12]  699 	mov	a,#0x53
+      00023B F0               [24]  700 	movx	@dptr,a
+                                    701 ;	scsi.c:153: usb_buffer[0x17A] = 'V';
+      00023C 90r01r7A         [24]  702 	mov	dptr,#(_usb_buffer + 0x017a)
+      00023F 74 56            [12]  703 	mov	a,#0x56
+      000241 F0               [24]  704 	movx	@dptr,a
+                                    705 ;	scsi.c:154: usb_buffer[0x17B] = 'R';
+      000242 90r01r7B         [24]  706 	mov	dptr,#(_usb_buffer + 0x017b)
+      000245 74 52            [12]  707 	mov	a,#0x52
+      000247 F0               [24]  708 	movx	@dptr,a
+                                    709 ;	scsi.c:155: usb_buffer[0x17E] = 0x23;
+      000248 90r01r7E         [24]  710 	mov	dptr,#(_usb_buffer + 0x017e)
+      00024B 74 23            [12]  711 	mov	a,#0x23
+      00024D F0               [24]  712 	movx	@dptr,a
+                                    713 ;	scsi.c:156: usb_buffer[0x17F] = 0x03;
+      00024E 90r01r7F         [24]  714 	mov	dptr,#(_usb_buffer + 0x017f)
+      000251 74 03            [12]  715 	mov	a,#0x03
+      000253 F0               [24]  716 	movx	@dptr,a
+                                    717 ;	scsi.c:157: usb_buffer[0x200] = 'I';
+      000254 90r02r00         [24]  718 	mov	dptr,#(_usb_buffer + 0x0200)
+      000257 74 49            [12]  719 	mov	a,#0x49
+      000259 F0               [24]  720 	movx	@dptr,a
+                                    721 ;	scsi.c:158: usb_buffer[0x201] = 'F';
+      00025A 90r02r01         [24]  722 	mov	dptr,#(_usb_buffer + 0x0201)
+      00025D 74 46            [12]  723 	mov	a,#0x46
+      00025F F0               [24]  724 	movx	@dptr,a
+                                    725 ;	scsi.c:159: SendData1(0x210, 0);
+      000260 75*00 00         [24]  726 	mov	_SendData1_PARM_2,#0x00
+      000263 90 02 10         [24]  727 	mov	dptr,#0x0210
+      000266 12r00r00         [24]  728 	lcall	_SendData1
+                                    729 ;	scsi.c:160: scsi_status = 0;
+      000269 75*00 00         [24]  730 	mov	_scsi_status,#0x00
+                                    731 ;	scsi.c:161: return 1;
+      00026C 75 82 01         [24]  732 	mov	dpl,#0x01
+                                    733 ;	scsi.c:163: case VENDOR_BOOT:
+      00026F 22               [24]  734 	ret
+      000270                        735 00120$:
+                                    736 ;	scsi.c:166: XVAL(0xFA14) = 0x07;
+      000270 90 FA 14         [24]  737 	mov	dptr,#0xFA14
+      000273 74 07            [12]  738 	mov	a,#0x07
+      000275 F0               [24]  739 	movx	@dptr,a
+                                    740 ;	scsi.c:167: XVAL(0xF747) &= 0xEF;
+      000276 90 F7 47         [24]  741 	mov	dptr,#0xF747
+      000279 E0               [24]  742 	movx	a,@dptr
+      00027A 54 EF            [12]  743 	anl	a,#0xEF
+      00027C F0               [24]  744 	movx	@dptr,a
+                                    745 ;	scsi.c:168: XVAL(0xFA15) = 0x06;
+      00027D 90 FA 15         [24]  746 	mov	dptr,#0xFA15
+      000280 74 06            [12]  747 	mov	a,#0x06
+      000282 F0               [24]  748 	movx	@dptr,a
+                                    749 ;	scsi.c:169: XVAL(0xFA38) |= 0x01;
+      000283 90 FA 38         [24]  750 	mov	dptr,#0xFA38
+      000286 E0               [24]  751 	movx	a,@dptr
+      000287 44 01            [12]  752 	orl	a,#0x01
+      000289 F0               [24]  753 	movx	@dptr,a
+                                    754 ;	scsi.c:170: XVAL(0xF08F) = 0x00;
+      00028A 90 F0 8F         [24]  755 	mov	dptr,#0xF08F
+      00028D E4               [12]  756 	clr	a
+      00028E F0               [24]  757 	movx	@dptr,a
+                                    758 ;	scsi.c:171: XVAL(0xFA68) &= 0xF7;
+      00028F 90 FA 68         [24]  759 	mov	dptr,#0xFA68
+      000292 E0               [24]  760 	movx	a,@dptr
+      000293 54 F7            [12]  761 	anl	a,#0xF7
+      000295 F0               [24]  762 	movx	@dptr,a
+                                    763 ;	scsi.c:172: XVAL(0xFA6A) &= 0xF7;
+      000296 90 FA 6A         [24]  764 	mov	dptr,#0xFA6A
+      000299 E0               [24]  765 	movx	a,@dptr
+      00029A 54 F7            [12]  766 	anl	a,#0xF7
+      00029C F0               [24]  767 	movx	@dptr,a
+                                    768 ;	scsi.c:173: XVAL(0xFA48) &= 0xFE;
+      00029D 90 FA 48         [24]  769 	mov	dptr,#0xFA48
+      0002A0 E0               [24]  770 	movx	a,@dptr
+      0002A1 54 FE            [12]  771 	anl	a,#0xFE
+      0002A3 FF               [12]  772 	mov	r7,a
+      0002A4 F0               [24]  773 	movx	@dptr,a
+                                    774 ;	scsi.c:174: break;
+                                    775 ;	scsi.c:176: default:
+      0002A5 80 04            [24]  776 	sjmp	00123$
+      0002A7                        777 00121$:
+                                    778 ;	scsi.c:179: return 0;
+      0002A7 75 82 00         [24]  779 	mov	dpl,#0x00
+                                    780 ;	scsi.c:183: default:
+      0002AA 22               [24]  781 	ret
+      0002AB                        782 00123$:
+                                    783 ;	scsi.c:186: return 0;
+      0002AB 75 82 00         [24]  784 	mov	dpl,#0x00
+                                    785 ;	scsi.c:188: }
+      0002AE 22               [24]  786 	ret
+                                    787 	.area CSEG    (CODE)
+                                    788 	.area CONST   (CODE)
+                                    789 	.area XINIT   (CODE)
+                                    790 	.area CABS    (ABS,CODE)

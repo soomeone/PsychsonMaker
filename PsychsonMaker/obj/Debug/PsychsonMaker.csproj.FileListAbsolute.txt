@@ -1,0 +1,9 @@
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\bin\Debug\PsychsonMaker.exe.config
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\bin\Debug\PsychsonMaker.exe
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\bin\Debug\PsychsonMaker.pdb
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Debug\PsychsonMaker.csprojResolveAssemblyReference.cache
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Debug\PsychsonMaker.SomeForm.resources
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Debug\PsychsonMaker.Properties.Resources.resources
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Debug\PsychsonMaker.csproj.GenerateResource.Cache
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Debug\PsychsonMaker.exe
+c:\users\mio\documents\visual studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Debug\PsychsonMaker.pdb
