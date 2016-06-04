@@ -1,0 +1,8 @@
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\bin\Release\PsychsonMaker.exe.config
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\bin\Release\PsychsonMaker.exe
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\bin\Release\PsychsonMaker.pdb
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Release\PsychsonMaker.SomeForm.resources
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Release\PsychsonMaker.Properties.Resources.resources
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Release\PsychsonMaker.csproj.GenerateResource.Cache
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Release\PsychsonMaker.exe
+C:\Users\Mio\Documents\Visual Studio 2012\Projects\PsychsonMaker\PsychsonMaker\obj\Release\PsychsonMaker.pdb

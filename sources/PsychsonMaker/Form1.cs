@@ -24,19 +24,39 @@ namespace PsychsonMaker
 
         private void SomeForm_Load(object sender, EventArgs e)
         {
-            loaddrives();
+            loaddrives(showdrives.Checked);
             loadfirmwares();
         }
 
-        public void loaddrives()
+        public void loaddrives(bool showall)
         {
             //Load attached drives and list it in combobox
             // TODO: check which drive is USB
             string[] drives = System.IO.Directory.GetLogicalDrives();
 
+            drive.Items.Clear();
+
             foreach (string str in drives)
             {
-                drive.Items.Add(str);
+                if (showall)
+                {
+                    drive.Items.Add(str);
+                    drive.Text = str;
+                }
+
+                else
+                {
+                    // Check with DriveCom if drive has right controller
+                    String driveargs = "/drive=" + str.ToCharArray()[0] + " /action=GetInfo";
+                    String result = Program.startProcess("\"" + Program.filedirectory + "DriveCom.exe\"", driveargs, Program.filedirectory, false);
+
+                    if (result.Contains("2303"))
+                    {
+                        // Right controller
+                        drive.Items.Add(str);
+                        drive.Text = str;
+                    }
+                }
             }
 
             log("Drives loaded");
@@ -81,8 +101,10 @@ namespace PsychsonMaker
                 string firmwarename = firmware.Text;
 
                 burnbutton.Enabled = false;
+                restorebutton.Enabled = false;
                 Program.burnfw(drivename, firmwarename, scriptfile.Text, backup.Checked);
                 burnbutton.Enabled = true;
+                restorebutton.Enabled = true;
             }
             else
             {
@@ -101,6 +123,24 @@ namespace PsychsonMaker
             }
 
             return false;
+        }
+
+        private void showdrives_CheckedChanged(object sender, EventArgs e)
+        {
+            loaddrives(showdrives.Checked);
+        }
+
+        private void restorebutton_Click(object sender, EventArgs e)
+        {
+            DialogResult confirmed = MessageBox.Show("Are you sure to restore the stock firmware?", "Confirm", MessageBoxButtons.YesNo);
+            if (confirmed == DialogResult.Yes)
+            {
+                burnbutton.Enabled = false;
+                restorebutton.Enabled = false;
+                Program.restorefw(firmware.Text, "FW03FF01V10353M.BIN");
+                burnbutton.Enabled = true;
+                restorebutton.Enabled = true;
+            }
         }
     }
 }

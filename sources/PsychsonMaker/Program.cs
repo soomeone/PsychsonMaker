@@ -110,6 +110,16 @@ namespace PsychsonMaker
             }
         }
 
+        public static void restorefw(String burnerpath, String fwname)
+        {
+            string burner = filedirectory + "2251-firmware\\" + burnerpath;
+            string fw = filedirectory + "usb-firmware\\" + fwname;
+            String driveargs = "/drive=G /action=SendFirmware /burner=\"" + burner + "\" /firmware=\"" + fw + "\"";
+
+            log("----  Starting Restoring  ----");
+            String output = startProcess("\"" + filedirectory + "DriveCom.exe\"", driveargs, filedirectory, true);
+        }
+
         public static void dumpDrive(char drive)
         {
 

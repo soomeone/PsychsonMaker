@@ -40,16 +40,18 @@
             this.console = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.scriptfile = new System.Windows.Forms.TextBox();
-            this.firmware = new System.Windows.Forms.ComboBox();
+            this.showdrives = new System.Windows.Forms.CheckBox();
             this.backup = new System.Windows.Forms.CheckBox();
+            this.firmware = new System.Windows.Forms.ComboBox();
+            this.scriptfile = new System.Windows.Forms.TextBox();
+            this.restorebutton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // burnbutton
             // 
-            this.burnbutton.Location = new System.Drawing.Point(315, 199);
+            this.burnbutton.Location = new System.Drawing.Point(321, 199);
             this.burnbutton.Name = "burnbutton";
             this.burnbutton.Size = new System.Drawing.Size(75, 23);
             this.burnbutton.TabIndex = 0;
@@ -82,7 +84,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(119, 26);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Firmware (BN03V104M \r\nrecommended)";
+            this.label3.Text = "Firmware (BN03V114M \r\nrecommended)";
             // 
             // label4
             // 
@@ -137,6 +139,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.showdrives);
             this.groupBox2.Controls.Add(this.backup);
             this.groupBox2.Controls.Add(this.firmware);
             this.groupBox2.Controls.Add(this.scriptfile);
@@ -152,12 +155,29 @@
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             // 
-            // scriptfile
+            // showdrives
             // 
-            this.scriptfile.Location = new System.Drawing.Point(62, 38);
-            this.scriptfile.Name = "scriptfile";
-            this.scriptfile.Size = new System.Drawing.Size(215, 20);
-            this.scriptfile.TabIndex = 7;
+            this.showdrives.AutoSize = true;
+            this.showdrives.Location = new System.Drawing.Point(116, 16);
+            this.showdrives.Name = "showdrives";
+            this.showdrives.Size = new System.Drawing.Size(66, 17);
+            this.showdrives.TabIndex = 10;
+            this.showdrives.Text = "Show all";
+            this.showdrives.UseVisualStyleBackColor = true;
+            this.showdrives.CheckedChanged += new System.EventHandler(this.showdrives_CheckedChanged);
+            // 
+            // backup
+            // 
+            this.backup.AutoSize = true;
+            this.backup.Checked = true;
+            this.backup.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.backup.Enabled = false;
+            this.backup.Location = new System.Drawing.Point(223, 136);
+            this.backup.Name = "backup";
+            this.backup.Size = new System.Drawing.Size(44, 17);
+            this.backup.TabIndex = 9;
+            this.backup.Text = "Yes";
+            this.backup.UseVisualStyleBackColor = true;
             // 
             // firmware
             // 
@@ -167,23 +187,31 @@
             this.firmware.Size = new System.Drawing.Size(140, 21);
             this.firmware.TabIndex = 8;
             // 
-            // backup
+            // scriptfile
             // 
-            this.backup.AutoSize = true;
-            this.backup.Checked = true;
-            this.backup.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.backup.Location = new System.Drawing.Point(223, 136);
-            this.backup.Name = "backup";
-            this.backup.Size = new System.Drawing.Size(44, 17);
-            this.backup.TabIndex = 9;
-            this.backup.Text = "Yes";
-            this.backup.UseVisualStyleBackColor = true;
+            this.scriptfile.Location = new System.Drawing.Point(62, 38);
+            this.scriptfile.Name = "scriptfile";
+            this.scriptfile.Size = new System.Drawing.Size(215, 20);
+            this.scriptfile.TabIndex = 7;
+            // 
+            // restorebutton
+            // 
+            this.restorebutton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.restorebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.restorebutton.Location = new System.Drawing.Point(12, 199);
+            this.restorebutton.Name = "restorebutton";
+            this.restorebutton.Size = new System.Drawing.Size(125, 23);
+            this.restorebutton.TabIndex = 10;
+            this.restorebutton.Text = "Restore Stock FW";
+            this.restorebutton.UseVisualStyleBackColor = false;
+            this.restorebutton.Click += new System.EventHandler(this.restorebutton_Click);
             // 
             // SomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(408, 383);
+            this.Controls.Add(this.restorebutton);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.burnbutton);
@@ -216,6 +244,8 @@
         private System.Windows.Forms.TextBox scriptfile;
         private System.Windows.Forms.ComboBox firmware;
         private System.Windows.Forms.CheckBox backup;
+        private System.Windows.Forms.CheckBox showdrives;
+        private System.Windows.Forms.Button restorebutton;
     }
 }
 
