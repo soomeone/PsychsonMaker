@@ -1,0 +1,6 @@
+{
+  "name": "Psychsonmaker",
+  "tagline": "A GUI tool to create a BadUSB stick (based on Psychson)",
+  "body": "### How to use it?\r\n![](https://cloud.githubusercontent.com/assets/19540127/15786569/a0428b0e-29bd-11e6-992d-1aaf00a40b25.png)\r\n1. Download the tool here (Direct Github link)\r\n1. Unzip the content somewhere\r\n1. Start PsychsonMaker.exe\r\n1. Follow the instructions\r\n\r\n###... More is coming soon ...\r\n\r\nSo actually I don't really know how to name this project. I named it PsychsonMaker because the Flash utility this tool is using is named Psychson. But any other suggestions are welcome :)\r\n\r\nIf you find any errors in the Github config, please notify me in the issues. This is my first Github project and I don't know yet how to create a project the right way.\r\n\r\nAnd last: I'm not an english prof. I can't either write good in english, nor form correct sentences. So please dont expect a perfect description, wiki or documentation.\r\n\r\n### Copyright notes\r\nThese tools are integrated in this programm:\r\n\r\n* Psychson by brandonlw (github page)\r\n* Duckencode by hak5darren(github page)\r\n* SDCC (sourceforge)\r\n* Firmware (by a russian page, I dont remember)",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
